@@ -293,7 +293,7 @@ def oref_clock():
     return open(os.path.join(myopenaps_dir + "monitor/clock-zoned.json")).read()
 
 
-@app.route("/append_local_temptarget")
+@app.route("/append_local_temptarget", methods=['POST'])
 def oref_append_local_temptarget():
     try:
         target = int(float(request.args.get("target")))
@@ -333,7 +333,7 @@ def autotune_recommendations():
     return open(os.path.join(myopenaps_dir + "autotune/autotune_recommendations.log")).read()
 
 
-@app.route("/enter_bolus")
+@app.route("/enter_bolus", methods=['POST'])
 @check_authorization
 def enter_bolus():
     try:
@@ -374,7 +374,7 @@ def press_keys():
 
     return result
 
-@app.route("/set_temp_basal")
+@app.route("/set_temp_basal", methods=['POST'])
 @check_authorization
 def set_temp_basal():
     try:
@@ -397,7 +397,7 @@ def set_temp_basal():
 
     return result
 
-@app.route("/suspend_pump")
+@app.route("/suspend_pump", methods=['POST'])
 @check_authorization
 def suspend_pump():
     result, is_error = Command(["mdt", "suspend"], 30).execute(need_disable_oref=True)
@@ -409,7 +409,7 @@ def suspend_pump():
 
     return result
 
-@app.route("/resume_pump")
+@app.route("/resume_pump", methods=['POST'])
 @check_authorization
 def resume_pump():
     result, is_error = Command(["mdt", "resume"], 30).execute(need_disable_oref=True)
@@ -427,20 +427,20 @@ def resume_pump():
 def oref_enabled():
     return json.dumps(read_oref_status())
 
-@app.route("/oref_enable")
+@app.route("/oref_enable", methods=['POST'])
 @check_authorization
 def oref_enable():
     switch_oref_status(True)
     return '', 200
 
-@app.route("/oref_disable")
+@app.route("/oref_disable", methods=['POST'])
 @check_authorization
 def oref_disable():
     switch_oref_status(False)
     return '', 200
 
 
-@app.route("/reboot")
+@app.route("/reboot", methods=['POST'])
 @check_authorization
 def reboot():
     Thread(target=lambda: os.system("sleep 1; reboot")).start()
